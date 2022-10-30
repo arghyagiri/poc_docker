@@ -1,7 +1,7 @@
 version: '3'
 services:
   dapi-config:
-    image: maven:3.6.0-jdk-13
+    image: dapi-config
     build:
       context: .
     environment:
