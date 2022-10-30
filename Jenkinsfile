@@ -1,37 +1,29 @@
-pipeline {
+#!groovy
 
-    agent any
-    tools {
-        maven 'maven3'
-        jdk 'openJdk11'
-      }
+pipeline {
+    environment {
+        JAVA_TOOL_OPTIONS = "-Duser.home=/var/lib/jenkins"
+    }
+    agent {
+        dockerfile {
+            label "docker"
+            args "-v /tmp/maven:/var/lib/jenkins/.m2 -e MAVEN_CONFIG=/var/lib/jenkins/.m2"
+        }
+    }
 
     stages {
-        stage ('Initialize') {
-                              steps {
-                                  sh '''
-                                      echo "PATH = ${PATH}"
-                                      echo "M2_HOME = ${M2_HOME}"
-                                  '''
-                              }
-                          }
-
-                          stage ('Build') {
-                              steps {
-                                  sh 'mvn -Dmaven.test.failure.ignore=true install'
-                              }
-                              post {
-                                  success {
-                                      junit 'target/surefire-reports/**/*.xml'
-                                  }
-                              }
-                          }
-        stage('Test') {
-        agent { dockerfile true }
+        stage("Build") {
             steps {
-                sh 'node --version'
-                sh 'svn --version'
+                sh "ssh -V"
+                sh "mvn -version"
+                sh "mvn clean install"
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
