@@ -9,11 +9,34 @@ pipeline {
                     docker version
                     docker info
                     docker-compose version
-                    curl --version
-                    jq --version
-                    java --version
                 '''
             }
+        }
+
+        stage('Prune Docker Data'){
+            steps{
+                sh 'docker system prune -a --volume -f'
+            }
+        }
+
+        stage('Start Container'){
+            steps{
+                sh 'docker compose up -d --no-color --wait'
+                sh 'docker compose ps'
+            }
+        }
+
+        stage('Run tests against the container'){
+            steps{
+                sh 'curl http://localhost:9999/user'
+            }
+        }
+    }
+
+    post{
+        always{
+            sh 'docker compose down --remove-orphans -v'
+            sh 'docker compose ps'
         }
     }
 }
