@@ -6,7 +6,7 @@ pipeline {
     }
     agent {
         dockerfile {
-            label "docker"
+            /* label "docker" */
             args "-v /tmp/maven:/var/lib/jenkins/.m2 -e MAVEN_CONFIG=/var/lib/jenkins/.m2"
         }
     }
