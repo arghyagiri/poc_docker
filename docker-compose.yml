@@ -1,8 +1,13 @@
 version: '3'
 services:
-  echo-server:
-    image: ealen/echo-server:latest
+  dapi-config:
+    image: maven:3.6.0-jdk-13
+    build:
+      context: .
     environment:
       - ENABLE_ENVIRONMENT=false
     ports:
       - 3000:80
+    volumes:
+      - ${APPLICATION_ROOT_FOLDER}:/usr/src/mymaven
+      - ${MAVEN_SETTINGS_FOLDER}:/root/.m2

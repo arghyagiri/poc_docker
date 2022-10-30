@@ -1,5 +1,9 @@
 FROM maven:3.6.0-jdk-13
 
-RUN useradd -m -u 1000 -s /bin/bash jenkins
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN apt-get update && apt-get install dos2unix && dos2unix /usr/local/bin/entrypoint.sh && chmod +x /usr/local/bin/entrypoint.sh
 
-RUN yum install -y openssh-clients
+#Start application
+WORKDIR /usr/src/mymaven
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["bash"]
