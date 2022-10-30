@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
-ARG JAR_FILE=/var/lib/jenkins/.m2/repository/com/poc/demo/0.0.1-SNAPSHOT/*.jar
+ARG JAR_FILE=/var/lib/jenkins/workspace/poc_docker_main/target/demo-0.0.1-SNAPSHOT.jar 
 
 COPY ${JAR_FILE} app.jar
 
